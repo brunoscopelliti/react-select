@@ -1,15 +1,29 @@
 import React from "react";
 
-import Message from "../src";
+import Select from "../src";
 
 export default {
-  title: "Message",
-  component: Message,
+  title: "Select",
+  component: Select,
 };
 
-const Template = (args) => <Message {...args} />;
+const Template = (args) => <Select {...args} />;
 
-export const SimpleLabel = Template.bind({});
-SimpleLabel.args = {
-  label: "Hello, world",
+export const SimpleSelect = Template.bind({});
+SimpleSelect.args = {
+  label: "Pick a fruit",
+  options: [
+    {
+      id: "a",
+      label: "Apple",
+    },
+    {
+      id: "b",
+      label: "Banana",
+    },
+    {
+      id: "c",
+      label: "Cherry",
+    },
+  ],
 };

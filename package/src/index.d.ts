@@ -1,9 +1,19 @@
 import React from "react";
 
-export type MessageProps = {
+type Option = {
+  id : string;
   label : string;
+  value ?: string | number;
 };
 
-declare const Message: React.FC<MessageProps>;
+export type SelectProps = {
+  disabled ?: boolean;
+  label : string;
+  options : Option[];
+  placeholder ?: string;
+  renderHook ?: () => React.ReactNode;
+};
 
-export default Message;
+declare const Select: React.FC<SelectProps>;
+
+export default Select;
