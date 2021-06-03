@@ -92,7 +92,7 @@
   },
   "dependencies": {
     "@bscop/css-class": "^1.0.0",
-    "@bscop/react-dropdown": "^1.0.2",
+    "@bscop/react-dropdown": "^1.1.0",
     "@bscop/use-bool": "^1.0.1",
     "@bscop/use-forward-ref": "^1.0.2",
     "@bscop/use-id": "^2.0.0",

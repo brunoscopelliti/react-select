@@ -131,7 +131,7 @@ describe("Select", () => {
     expect(dropdownHook).toHaveFocus();
   });
 
-  it.skip("closes the select when user clicks outside", () => {
+  it("closes the select when user clicks outside", () => {
     render(
       <Select
         label="Pick a fruit"

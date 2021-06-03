@@ -67,6 +67,7 @@ const Select = React.forwardRef(
           label={
             renderHook()
           }
+          onBlur={hide}
           role="listbox"
           show={show}
           visible={visible}
