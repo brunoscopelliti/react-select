@@ -19,12 +19,9 @@ const Select = React.forwardRef(
       className,
       label,
       options,
-      renderHook = () => {
-        /**
-         * TODO
-         * active option | placeholder | first option
-         */
-        return options[0].label;
+      placeholder,
+      renderHook = (activeOption) => {
+        return activeOption?.label || placeholder || options[0].label;
       },
       ...dropdownProps
     } = props;
@@ -53,7 +50,7 @@ const Select = React.forwardRef(
      * Set (and update) only after the select
      * is open the first time.
      */
-    const activeOptionIndex = 0;
+    const activeOptionIndex = undefined;
 
     return (
       <div ref={ref} className={cssClass("ui-select", className)}>
@@ -62,10 +59,10 @@ const Select = React.forwardRef(
         </div>
         <ControlledDropdown
           {...dropdownProps}
-          aria-activedescendant={options[activeOptionIndex].id}
+          aria-activedescendant={options[activeOptionIndex]?.id}
           aria-labelledby={labelId}
           label={
-            renderHook()
+            renderHook(options[activeOptionIndex])
           }
           onBlur={hide}
           role="listbox"
