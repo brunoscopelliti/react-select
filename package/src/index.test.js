@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Select from "./";
@@ -90,5 +90,83 @@ describe("Select", () => {
     const options = screen.getAllByRole("option");
 
     expect(options).toHaveLength(3);
+  });
+
+  it("closes the select when Escape is pressed", () => {
+    render(
+      <Select
+        label="Pick a fruit"
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    userEvent.click(dropdownHook);
+
+    const dropdownContent = screen.getByRole("listbox");
+
+    expect(dropdownContent).toBeVisible();
+    expect(dropdownContent).toHaveFocus();
+
+    fireEvent.keyDown(document, { code: "Escape" });
+
+    expect(dropdownContent).not.toBeVisible();
+
+    expect(dropdownHook).toHaveFocus();
+  });
+
+  it.skip("closes the select when user clicks outside", () => {
+    render(
+      <Select
+        label="Pick a fruit"
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    userEvent.click(dropdownHook);
+
+    const dropdownContent = screen.getByRole("listbox");
+
+    expect(dropdownContent).toBeVisible();
+    expect(dropdownContent).toHaveFocus();
+
+    userEvent.click(document.body);
+
+    expect(dropdownContent).not.toBeVisible();
+
+    expect(dropdownHook).not.toHaveFocus();
   });
 });

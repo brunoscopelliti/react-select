@@ -1,13 +1,22 @@
-import React, { useRef } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
+import cssClass from "@bscop/css-class";
 import { ControlledDropdown } from "@bscop/react-dropdown";
+
 import useBool from "@bscop/use-bool";
+import useForwardRef from "@bscop/use-forward-ref";
+import useKeydown from "@bscop/use-keydown";
 import useId from "@bscop/use-id";
 
-const Select =
-  (props) => {
+const Select = React.forwardRef(
+  /**
+   * @param {import("./index").SelectProps} props
+   * @param {React.ForwardedRef<HTMLDivElement>} maybeRef
+   */
+  (props, maybeRef) => {
     const {
+      className,
       label,
       options,
       renderHook = () => {
@@ -20,11 +29,24 @@ const Select =
       ...dropdownProps
     } = props;
 
+    const ref = useForwardRef(maybeRef);
+
     const [visible, show, hide] = useBool(false);
 
-    const labelId = useId({ prefix: "select-label" });
+    const hideInternal =
+      () => {
+        hide();
 
-    const ref = useRef(null);
+        if (ref.current) {
+          const dropdownHook = ref.current.querySelector("button");
+
+          dropdownHook?.focus();
+        }
+      };
+
+    useKeydown(hideInternal, { active: visible, keys: "Escape" });
+
+    const labelId = useId({ prefix: "select-label" });
 
     /**
      * TODO
@@ -34,12 +56,11 @@ const Select =
     const activeOptionIndex = 0;
 
     return (
-      <div>
-        <div id={labelId}>
+      <div ref={ref} className={cssClass("ui-select", className)}>
+        <div className="ui-label" id={labelId}>
           {label}
         </div>
         <ControlledDropdown
-          ref={ref}
           {...dropdownProps}
           aria-activedescendant={options[activeOptionIndex].id}
           aria-labelledby={labelId}
@@ -67,21 +88,23 @@ const Select =
         </ControlledDropdown>
       </div>
     );
-  };
+  }
+);
+
+const OptionShape = PropTypes.exact({
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+});
 
 Select.propTypes = {
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   label: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      value: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number,
-      ]),
-    })
-  ).isRequired,
+  options: PropTypes.arrayOf(OptionShape).isRequired,
   placeholder: PropTypes.string,
   renderHook: PropTypes.func,
 };

@@ -7,6 +7,7 @@ type Option = {
 };
 
 export type SelectProps = {
+  className ?: string;
   disabled ?: boolean;
   label : string;
   options : Option[];
@@ -14,6 +15,6 @@ export type SelectProps = {
   renderHook ?: () => React.ReactNode;
 };
 
-declare const Select: React.FC<SelectProps>;
+declare const Select: React.ForwardRefExoticComponent<SelectProps & React.RefAttributes<HTMLDivElement>>;
 
 export default Select;
