@@ -2,7 +2,7 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import Select from "./";
+import Select, { StatefulSelect } from "./";
 
 describe("Select", () => {
   it("renders the select", () => {
@@ -45,6 +45,75 @@ describe("Select", () => {
     expect(dropdownContent).not.toBeVisible();
   });
 
+  it("renders the select / with value", () => {
+    render(
+      <Select
+        label="Pick a fruit"
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+        value="b"
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    expect(dropdownHook).toHaveTextContent("Banana");
+  });
+
+  it("renders the select / no options", () => {
+    const { container } = render(
+      <Select
+        label="Pick a fruit"
+        options={[]}
+      />
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it("renders the select / disabled", () => {
+    render(
+      <Select
+        disabled
+        label="Pick a fruit"
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    expect(dropdownHook).toHaveAttribute("disabled", "");
+  });
+
   it("renders the select / placeholder", () => {
     render(
       <Select
@@ -74,7 +143,7 @@ describe("Select", () => {
     expect(dropdownHook).toHaveTextContent("Fruits");
   });
 
-  it.skip("opens the select", () => {
+  it("opens the select", () => {
     render(
       <Select
         label="Pick a fruit"
@@ -103,6 +172,8 @@ describe("Select", () => {
 
     expect(dropdownContent).not.toBeVisible();
 
+    expect(dropdownContent).not.toHaveAttribute("aria-activedescendant");
+
     const dropdownHook = screen.getByRole("button");
 
     userEvent.click(dropdownHook);
@@ -112,13 +183,13 @@ describe("Select", () => {
 
     expect(dropdownContent).toHaveAttribute("aria-labelledby", label.id);
 
-    expect(dropdownContent).toHaveAttribute("aria-activedescendant", "a");
-
     expect(dropdownHook).toHaveAttribute("aria-expanded", "true");
 
     const options = screen.getAllByRole("option");
 
     expect(options).toHaveLength(3);
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
   });
 
   it("closes the select when Escape is pressed", () => {
@@ -197,5 +268,190 @@ describe("Select", () => {
     expect(dropdownContent).not.toBeVisible();
 
     expect(dropdownHook).not.toHaveFocus();
+  });
+
+  it("selects option", () => {
+    const spy = jest.fn();
+
+    render(
+      <StatefulSelect
+        label="Pick a fruit"
+        onChange={spy}
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    userEvent.click(dropdownHook);
+
+    const dropdownContent = screen.getByRole("listbox");
+
+    const options = screen.getAllByRole("option");
+
+    userEvent.click(options[1]);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({ id: "b", label: "Banana" }, 1);
+    spy.mockReset();
+
+    expect(dropdownContent).not.toBeVisible();
+
+    expect(dropdownHook).toHaveTextContent("Banana");
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[1].id);
+
+    userEvent.click(dropdownHook);
+    userEvent.click(options[1]);
+
+    expect(spy).not.toHaveBeenCalled();
+
+    userEvent.click(dropdownHook);
+    userEvent.click(options[2]);
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({ id: "c", label: "Cherry" }, 2);
+  });
+
+  it("selects option / keyboard", () => {
+    const spy = jest.fn();
+
+    render(
+      <StatefulSelect
+        label="Pick a fruit"
+        onChange={spy}
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    userEvent.click(dropdownHook);
+
+    const dropdownContent = screen.getByRole("listbox");
+
+    const options = screen.getAllByRole("option");
+
+    fireEvent.keyDown(document, { code: "ArrowDown" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[1].id);
+
+    fireEvent.keyDown(document, { code: "ArrowDown" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
+
+    fireEvent.keyDown(document, { code: "ArrowUp" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[1].id);
+
+    expect(spy).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(document, { code: "Enter" });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({ id: "b", label: "Banana" }, 1);
+    spy.mockReset();
+
+    expect(dropdownContent).not.toBeVisible();
+
+    expect(dropdownHook).toHaveTextContent("Banana");
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[1].id);
+
+    userEvent.click(dropdownHook);
+
+    fireEvent.keyDown(document, { code: "End" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
+
+    fireEvent.keyDown(document, { code: "Home" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
+
+    fireEvent.keyDown(document, { code: "Enter" });
+
+    expect(dropdownContent).not.toBeVisible();
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({ id: "a", label: "Apple" }, 0);
+    spy.mockReset();
+  });
+
+  it("selects option / keyboard edges", () => {
+    render(
+      <StatefulSelect
+        label="Pick a fruit"
+        options={
+          [
+            {
+              id: "a",
+              label: "Apple",
+            },
+            {
+              id: "b",
+              label: "Banana",
+            },
+            {
+              id: "c",
+              label: "Cherry",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    userEvent.click(dropdownHook);
+
+    const dropdownContent = screen.getByRole("listbox");
+
+    const options = screen.getAllByRole("option");
+
+    fireEvent.keyDown(document, { code: "End" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
+
+    fireEvent.keyDown(document, { code: "ArrowDown" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
+
+    fireEvent.keyDown(document, { code: "Home" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
+
+    fireEvent.keyDown(document, { code: "ArrowUp" });
+
+    expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
   });
 });

@@ -1,3 +1,28 @@
-.label {
-  font-size: 1rem;
+@import "node_modules/@bscop/react-dropdown/package/src/style.scss";
+
+.ui-select {
+  button {
+    border: 1px solid var(--dropdown-border-color);
+    outline: 0;
+    padding: .2rem .5rem;
+  }
+
+  button:focus {
+    border-color: #000;
+  }
+
+  [role="listbox"] {
+    background: var(--main-bg-color);
+    color: var(--main-color);
+    padding: .2rem 0;
+  }
+
+  [role="option"] {
+    cursor: pointer;
+    padding: .1rem .75rem;
+  }
+
+  [aria-selected] {
+    background: var(--select-active-option-bg-color);
+  }
 }
