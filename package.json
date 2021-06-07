@@ -71,7 +71,7 @@
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "codecov": "^3.8.2",
-    "eslint": "^7.27.0",
+    "eslint": "^7.28.0",
     "eslint-config-bruno": "^3.0.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-jest": "^24.3.6",
@@ -81,7 +81,8 @@
     "husky": "^6.0.0",
     "jest": "^27.0.4",
     "node-sass": "^6.0.0",
-    "rollup": "^2.50.6",
+    "normalize.css": "^8.0.1",
+    "rollup": "^2.51.0",
     "standard-version": "^9.3.0",
     "typescript": "^4.3.2"
   },
@@ -92,7 +93,7 @@
   },
   "dependencies": {
     "@bscop/css-class": "^1.0.0",
-    "@bscop/react-dropdown": "^1.1.0",
+    "@bscop/react-dropdown": "^1.2.0",
     "@bscop/use-bool": "^1.0.1",
     "@bscop/use-forward-ref": "^1.0.2",
     "@bscop/use-id": "^2.0.0",
