@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Select, { StatefulSelect } from "./";
@@ -453,5 +453,93 @@ describe("Select", () => {
     fireEvent.keyDown(document, { code: "ArrowUp" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
+  });
+
+  it("selects option / char", async () => {
+    const spy = jest.fn();
+
+    render(
+      <Select
+        label="Pick a pet"
+        onChange={spy}
+        options={
+          [
+            {
+              id: "o1",
+              label: "Bear",
+            },
+            {
+              id: "o2",
+              label: "Cat",
+            },
+            {
+              id: "o3",
+              label: "Chicken",
+            },
+            {
+              id: "o4",
+              label: "Crocodile",
+            },
+            {
+              id: "o5",
+              label: "Dog",
+            },
+            {
+              id: "o6",
+              label: "Elephant",
+            },
+            {
+              id: "o7",
+              label: "Lion",
+            },
+            {
+              id: "o8",
+              label: "Monkey",
+            },
+            {
+              id: "o9",
+              label: "Rabbit",
+            },
+            {
+              id: "o10",
+              label: "Wolf",
+            },
+          ]
+        }
+      />
+    );
+
+    const dropdownHook = screen.getByRole("button");
+
+    userEvent.click(dropdownHook);
+
+    const dropdownContent = screen.getByRole("listbox");
+
+    const options = screen.getAllByRole("option");
+
+    fireEvent.keyDown(document, { code: "KeyD", key: "d" });
+
+    await waitFor(() => {
+      expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[4].id);
+    });
+
+    fireEvent.keyDown(document, { code: "KeyC", key: "c" });
+    fireEvent.keyDown(document, { code: "KeyR", key: "r" });
+
+    await waitFor(() => {
+      expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[3].id);
+    });
+
+    fireEvent.keyDown(document, { code: "KeyR", key: "r" });
+
+    await waitFor(() => {
+      expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[8].id);
+    });
+
+    fireEvent.keyDown(document, { code: "Enter" });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith({ id: "o9", label: "Rabbit" }, 8);
+    spy.mockReset();
   });
 });

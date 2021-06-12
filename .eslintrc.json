@@ -1,4 +1,7 @@
 {
+  "env": {
+    "browser": true
+  },
   "extends": [
     "bruno",
     "plugin:jest/all",

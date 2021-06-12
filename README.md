@@ -16,12 +16,55 @@ npm i @bscop/react-select
 ## Usage
 
 ```js
-import Component from "@bscop/react-select";
+import Select from "@bscop/react-select";
 
 function App () {
   return (
-    <Component />
+    <Select
+      label="Pick a fruit"
+      onChange={
+        (option) => {
+          alert(`Option selected: "${option.label}"`);
+        }
+      }
+      options={
+        [
+          {
+            id: "a",
+            label: "Apple",
+          },
+          {
+            id: "b",
+            label: "Banana",
+          },
+          {
+            id: "c",
+            label: "Cherry",
+          },
+        ]
+      }
+    />
   );
+}
+```
+
+### Props
+
+...
+
+### CSS Custom properties
+
+You can set the following CSS Custom properties to customize the look of the dropdown component:
+
+```css
+:root {
+  --main-color: black;
+  --main-bg-color: white;
+  --dropdown-hook-border-color: #000;
+  --dropdown-hook-disabled-border-color: #bababa;
+  --dropdown-border-color: #bababa;
+  --select-caret: url("data:image/png;base64,...");
+  --select-active-option-bg-color: #eaeaea;
 }
 ```
 

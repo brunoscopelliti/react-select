@@ -2,8 +2,11 @@
   --main-color: black;
   --main-bg-color: white;
 
+  --dropdown-hook-border-color: #000;
+  --dropdown-hook-disabled-border-color: #bababa;
   --dropdown-border-color: #bababa;
 
+  --select-caret: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABjklEQVR4Xu2XsS6FQRCFv1tIlHQeQiNEJRIVrYdR6RVeRk+iQkKh8xAqWoWQm7it2NkzuzZ7br1zZs63Z+6fXTD5bzG5fwzACZicgFdg8gD4T9Ar4BWYnIBXYPIA+CvgFfAKTE7AKzB5APwV8Ap4BeoIbAEbdRLV1W/Aa1SlZgUugbNoY3HdBXAe0YwC2AGeIw0Ta7aBl1L9KIAj4La0WfL5A+C+tEcUwBpwB+yXNkw6/wAcAp+l+lEAyz6bwA2wW9pUfP4JOAbeI7o1AP4DhCrzSwO1AHpCqDavAtADgsS8EkBLCDLzagAtIEjNZwDIhCA3nwUgA0KK+UwASghp5rMBKCCkmm8BoAZCuvlWACIQmphvCaAEQjPzrQH8BUJT8z0A/AahufleAFYQroG9nyfsI3ASfdJGnsGrGsVrMNp/HTgFvoAr4CMqVFPXE0DN3LJaA5ChHFTICRj04mRjOwEylIMKOQGDXpxsbCdAhnJQISdg0IuTje0EyFAOKuQEDHpxsrGdABnKQYWmT8A3HU4+QTeTaKwAAAAASUVORK5CYII=");
   --select-active-option-bg-color: #eaeaea;
 }
 
@@ -12,4 +15,11 @@ body {
   font-family: "Nunito", sans-serif;
   font-size: 16px;
   line-height: 24px;
+}
+
+.ui-select {
+  [aria-haspopup="listbox"],
+  [role="listbox"] {
+    min-width: 120px;
+  }
 }

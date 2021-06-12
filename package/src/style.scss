@@ -2,13 +2,19 @@
 
 .ui-select {
   button {
-    border: 1px solid var(--dropdown-border-color);
-    outline: 0;
+    border: 1px solid var(--dropdown-hook-disabled-border-color);
     padding: .2rem .5rem;
+    text-align: left;
   }
 
-  button:focus {
-    border-color: #000;
+  button:not([disabled]) {
+    border-color: var(--dropdown-hook-border-color);
+    padding-right: .25rem;
+    background-image: var(--select-caret);
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    background-position: center right;
   }
 
   [role="listbox"] {
@@ -24,5 +30,12 @@
 
   [aria-selected] {
     background: var(--select-active-option-bg-color);
+  }
+}
+
+.ui-select.ui-scrollable {
+  [role="listbox"] {
+    max-height: calc(2rem * 5);;
+    overflow-y: auto;
   }
 }

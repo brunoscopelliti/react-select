@@ -13,7 +13,9 @@ export type SelectProps = {
   options : Option[];
   onChange ?: (option : Option, optionIndex : number) => void;
   placeholder ?: string;
-  renderHook ?: () => React.ReactNode;
+  renderHook ?: (selectedOption : Option | null, props : SelectProps) => React.ReactNode;
+  renderOption ?: (option : Option) => React.ReactNode;
+  scrollable ?: boolean;
   value ?: string;
 };
 

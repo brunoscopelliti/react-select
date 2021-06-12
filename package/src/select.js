@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 import cssClass from "@bscop/css-class";
@@ -8,6 +8,8 @@ import useBool from "@bscop/use-bool";
 import useForwardRef from "@bscop/use-forward-ref";
 import useKeydown from "@bscop/use-keydown";
 import useId from "@bscop/use-id";
+
+import useScrollSelectedIntoView from "./hooks/use-scroll-selected-into-view";
 
 /**
  * @name focusButton
@@ -36,6 +38,34 @@ const findOptionIndex =
       );
   };
 
+const rxAlphaNumericChar = /^[a-z0-9]$/i;
+
+/**
+ * @name findOptionIndexByLabel
+ * @param {import("./index").Option[]} options
+ * @param {number} startingIndex
+ * @param {string} query
+ * @returns {number}
+ */
+const findOptionIndexByLabel =
+  (options, startingIndex, query) => {
+    const queryRx = new RegExp("^" + query, "i");
+
+    let currentIndex = startingIndex;
+
+    do {
+      currentIndex = currentIndex + 1 === options.length
+        ? 0
+        : currentIndex + 1;
+
+      if (queryRx.test(options[currentIndex].label)) {
+        return currentIndex;
+      }
+    } while (currentIndex !== startingIndex);
+
+    return 0;
+  };
+
 const Select = React.forwardRef(
   /**
    * @param {import("./index").SelectProps} props
@@ -51,6 +81,10 @@ const Select = React.forwardRef(
       renderHook = (activeOption) => {
         return activeOption?.label || placeholder || options[0].label;
       },
+      renderOption = (option) => {
+        return option.label;
+      },
+      scrollable,
       value,
       ...dropdownProps
     } = props;
@@ -66,8 +100,10 @@ const Select = React.forwardRef(
 
     const labelId = instanceId + "-label";
 
+    const initiallyActiveOptionIndex = findOptionIndex(options, value);
+
     const [activeOptionIndex, setActiveOptionIndex] = useState(
-      findOptionIndex(options, value)
+      initiallyActiveOptionIndex
     );
 
     useEffect(
@@ -109,6 +145,32 @@ const Select = React.forwardRef(
         }
       };
 
+    const refTime = useRef(null);
+    const refQuery = useRef("");
+
+    const selectByQuery =
+      () => {
+        const query = refQuery.current;
+
+        refQuery.current = "";
+        refTime.current = null;
+
+        setActiveOptionIndex(
+          findOptionIndexByLabel(options, activeOptionIndex, query)
+        );
+      };
+
+    const scheduleSelectByChar =
+      (char) => {
+        if (refTime.current) {
+          clearTimeout(refTime.current);
+        }
+
+        refQuery.current += char;
+
+        refTime.current = setTimeout(selectByQuery, 250);
+      };
+
     const onKeydown =
       (event) => {
         switch (event.code) {
@@ -147,17 +209,26 @@ const Select = React.forwardRef(
             event.preventDefault();
             hideAndRestoreFocus();
             break;
+          default:
+            if (rxAlphaNumericChar.test(event.key)) {
+              scheduleSelectByChar(event.key);
+            }
+            break;
         }
       };
 
     useKeydown(onKeydown, { active: visible });
+
+    useScrollSelectedIntoView(
+      ref.current?.querySelector("[role='listbox']")
+    );
 
     if (options.length === 0) {
       return null;
     }
 
     return (
-      <div ref={ref} className={cssClass("ui-select", className)}>
+      <div ref={ref} className={cssClass("ui-select", className, { "ui-scrollable": scrollable })}>
         <div className="ui-label" id={labelId}>
           {label}
         </div>
@@ -171,7 +242,9 @@ const Select = React.forwardRef(
           aria-labelledby={labelId}
           hide={hide}
           label={
-            renderHook(options[activeOptionIndex])
+            renderHook(
+              options[initiallyActiveOptionIndex], props
+            )
           }
           onBlur={hide}
           role="listbox"
@@ -198,11 +271,7 @@ const Select = React.forwardRef(
                     }
                     role="option"
                   >
-                    {/**
-                     * TODO
-                     * Add option to render custom label.
-                     */}
-                    {option.label}
+                    {renderOption(option)}
                   </div>
                 );
               }
@@ -231,6 +300,8 @@ Select.propTypes = {
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
   renderHook: PropTypes.func,
+  renderOption: PropTypes.func,
+  scrollable: PropTypes.bool,
   value: PropTypes.string,
 };
 
