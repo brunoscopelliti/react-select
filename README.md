@@ -50,7 +50,16 @@ function App () {
 
 ### Props
 
-...
+- [className]
+- [disabled]
+- label
+- options
+- [onChange]
+- [placeholder]
+- [renderHook]
+- [renderOption]
+- [scrollable]
+- [value]
 
 ### CSS Custom properties
 
