@@ -224,7 +224,7 @@ describe("Select", () => {
     expect(dropdownContent).toBeVisible();
     expect(dropdownContent).toHaveFocus();
 
-    fireEvent.keyDown(document, { code: "Escape" });
+    fireEvent.keyDown(dropdownContent, { code: "Escape" });
 
     expect(dropdownContent).not.toBeVisible();
 
@@ -362,21 +362,21 @@ describe("Select", () => {
 
     const options = screen.getAllByRole("option");
 
-    fireEvent.keyDown(document, { code: "ArrowDown" });
+    fireEvent.keyDown(dropdownContent, { code: "ArrowDown" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[1].id);
 
-    fireEvent.keyDown(document, { code: "ArrowDown" });
+    fireEvent.keyDown(dropdownContent, { code: "ArrowDown" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
 
-    fireEvent.keyDown(document, { code: "ArrowUp" });
+    fireEvent.keyDown(dropdownContent, { code: "ArrowUp" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[1].id);
 
     expect(spy).not.toHaveBeenCalled();
 
-    fireEvent.keyDown(document, { code: "Enter" });
+    fireEvent.keyDown(dropdownContent, { code: "Enter" });
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ id: "b", label: "Banana" }, 1);
@@ -390,15 +390,15 @@ describe("Select", () => {
 
     userEvent.click(dropdownHook);
 
-    fireEvent.keyDown(document, { code: "End" });
+    fireEvent.keyDown(dropdownContent, { code: "End" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
 
-    fireEvent.keyDown(document, { code: "Home" });
+    fireEvent.keyDown(dropdownContent, { code: "Home" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
 
-    fireEvent.keyDown(document, { code: "Enter" });
+    fireEvent.keyDown(dropdownContent, { code: "Enter" });
 
     expect(dropdownContent).not.toBeVisible();
 
@@ -438,19 +438,19 @@ describe("Select", () => {
 
     const options = screen.getAllByRole("option");
 
-    fireEvent.keyDown(document, { code: "End" });
+    fireEvent.keyDown(dropdownContent, { code: "End" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
 
-    fireEvent.keyDown(document, { code: "ArrowDown" });
+    fireEvent.keyDown(dropdownContent, { code: "ArrowDown" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[2].id);
 
-    fireEvent.keyDown(document, { code: "Home" });
+    fireEvent.keyDown(dropdownContent, { code: "Home" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
 
-    fireEvent.keyDown(document, { code: "ArrowUp" });
+    fireEvent.keyDown(dropdownContent, { code: "ArrowUp" });
 
     expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[0].id);
   });
@@ -517,26 +517,26 @@ describe("Select", () => {
 
     const options = screen.getAllByRole("option");
 
-    fireEvent.keyDown(document, { code: "KeyD", key: "d" });
+    fireEvent.keyDown(dropdownContent, { code: "KeyD", key: "d" });
 
     await waitFor(() => {
       expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[4].id);
     });
 
-    fireEvent.keyDown(document, { code: "KeyC", key: "c" });
-    fireEvent.keyDown(document, { code: "KeyR", key: "r" });
+    fireEvent.keyDown(dropdownContent, { code: "KeyC", key: "c" });
+    fireEvent.keyDown(dropdownContent, { code: "KeyR", key: "r" });
 
     await waitFor(() => {
       expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[3].id);
     });
 
-    fireEvent.keyDown(document, { code: "KeyR", key: "r" });
+    fireEvent.keyDown(dropdownContent, { code: "KeyR", key: "r" });
 
     await waitFor(() => {
       expect(dropdownContent).toHaveAttribute("aria-activedescendant", options[8].id);
     });
 
-    fireEvent.keyDown(document, { code: "Enter" });
+    fireEvent.keyDown(dropdownContent, { code: "Enter" });
 
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith({ id: "o9", label: "Rabbit" }, 8);

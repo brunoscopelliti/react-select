@@ -6,7 +6,6 @@ import { ControlledDropdown } from "@bscop/react-dropdown";
 
 import useBool from "@bscop/use-bool";
 import useForwardRef from "@bscop/use-forward-ref";
-import useKeydown from "@bscop/use-keydown";
 import useId from "@bscop/use-id";
 
 import useScrollSelectedIntoView from "./hooks/use-scroll-selected-into-view";
@@ -207,6 +206,7 @@ const Select = React.forwardRef(
             break;
           case "Escape":
             event.preventDefault();
+            event.stopPropagation();
             hideAndRestoreFocus();
             break;
           default:
@@ -216,8 +216,6 @@ const Select = React.forwardRef(
             break;
         }
       };
-
-    useKeydown(onKeydown, { active: visible });
 
     useScrollSelectedIntoView(
       ref.current?.querySelector("[role='listbox']")
@@ -247,6 +245,7 @@ const Select = React.forwardRef(
             )
           }
           onBlur={hide}
+          onKeyDown={onKeydown}
           role="listbox"
           show={showAndInitActiveOption}
           visible={visible}

@@ -6,9 +6,15 @@
   --dropdown-hook-disabled-border-color: #bababa;
   --dropdown-border-color: #bababa;
 
+  --modal-backdrop-bg-color: rgba(0, 0, 0, .2);
+  --modal-border-color: rgba(0, 0, 0, .2);
+  --modal-internal-border-color: #dee2e6;
+
   --select-caret: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABjklEQVR4Xu2XsS6FQRCFv1tIlHQeQiNEJRIVrYdR6RVeRk+iQkKh8xAqWoWQm7it2NkzuzZ7br1zZs63Z+6fXTD5bzG5fwzACZicgFdg8gD4T9Ar4BWYnIBXYPIA+CvgFfAKTE7AKzB5APwV8Ap4BeoIbAEbdRLV1W/Aa1SlZgUugbNoY3HdBXAe0YwC2AGeIw0Ta7aBl1L9KIAj4La0WfL5A+C+tEcUwBpwB+yXNkw6/wAcAp+l+lEAyz6bwA2wW9pUfP4JOAbeI7o1AP4DhCrzSwO1AHpCqDavAtADgsS8EkBLCDLzagAtIEjNZwDIhCA3nwUgA0KK+UwASghp5rMBKCCkmm8BoAZCuvlWACIQmphvCaAEQjPzrQH8BUJT8z0A/AahufleAFYQroG9nyfsI3ASfdJGnsGrGsVrMNp/HTgFvoAr4CMqVFPXE0DN3LJaA5ChHFTICRj04mRjOwEylIMKOQGDXpxsbCdAhnJQISdg0IuTje0EyFAOKuQEDHpxsrGdABnKQYWmT8A3HU4+QTeTaKwAAAAASUVORK5CYII=");
   --select-active-option-bg-color: #eaeaea;
 }
+
+@import "node_modules/@bscop/react-modal/package/src/style.scss";
 
 body {
   margin: 0;
