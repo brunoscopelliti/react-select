@@ -51,15 +51,46 @@ function App () {
 ### Props
 
 - [className]
+
+Optional. Additional css class that is going to be applied on the select root element.
+
 - [disabled]
+
+Optional. Default `false`. Determine whether the selected should be selected.
+
 - label
+
+A label that describes the purpose of the select component.
+
 - options
+
+List of options.\
+Each option should have shape as `{ id : string; label : string; value ?: string | number; }`
+
 - [onChange]
+
+Optional. Handler executed when the selected option change.\
+Receive the new selected option, and its index, as argument.
+
 - [placeholder]
+
+Optional. Determine the label rendered in the select hook button when there's no selected option.
+
 - [renderHook]
+
+Optional. Permits to customise the content of the select hook button.
+
 - [renderOption]
+
+Optional. Permits to customise how each option is rendered.
+
 - [scrollable]
+
+Optional. Default `false`. Determine whether the option list should be scrollable, in case the select contains a large number of options.
+
 - [value]
+
+Optional. Value of the selected option.
 
 ### CSS Custom properties
 
