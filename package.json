@@ -1,6 +1,6 @@
 {
   "name": "@bscop/react-select",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Accessible select (in React).",
   "main": "package/dist/index.js",
   "module": "package/dist/index.es.js",
