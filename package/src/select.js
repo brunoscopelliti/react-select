@@ -170,7 +170,7 @@ const Select = React.forwardRef(
         refTime.current = setTimeout(selectByQuery, 250);
       };
 
-    const onKeydown =
+    const onKeyDown =
       (event) => {
         switch (event.code) {
           case "ArrowDown":
@@ -245,7 +245,7 @@ const Select = React.forwardRef(
             )
           }
           onBlur={hide}
-          onKeyDown={onKeydown}
+          onKeyDown={onKeyDown}
           role="listbox"
           show={showAndInitActiveOption}
           visible={visible}
